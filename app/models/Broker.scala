@@ -7,14 +7,16 @@ package models
  */
 
 import akka.actor._
+import com.typesafe.config.ConfigFactory
 import scala.collection.mutable._
+import scala.concurrent.duration._
 
 object Broker {
   def props = Props[Broker]
 
   case class GetNextEvent(consumerId:String)
   case class AddNewEvent(event:Event)
-  case class CloseSession(consumerId:String)
+  case class CloseSession(consumerRef:ActorRef,consumerId:String)
   case object EndOfQueue
 }
 
@@ -27,9 +29,10 @@ class Broker extends Actor{
   def receive = {
     case GetNextEvent(consumerId) => getNextEvent(consumerId)
     case AddNewEvent(event) => addNewEvent(event)
-    case CloseSession(consumerId) => ???
+    case CloseSession(consumerRef,consumerId) => closeSession(consumerRef,consumerId)
   }
 
+  import context.dispatcher
   def getNextEvent(consumerId:String) = {
     val offset = consumerIdToOffset.get(consumerId).getOrElse(0)
     if(offset == 0)
@@ -41,11 +44,23 @@ class Broker extends Actor{
       consumerIdToOffset.update(consumerId,consumerIdToOffset.get(consumerId).get + 1)
     }
     else{
-      sender() ! EndOfQueue
-      //TODO:scheduler a self message (closesession()) to remove this consumer after a while
+      val consumerRef = sender()
+      val sessionHoldOnTime = ConfigFactory.load().getString("sessionTimeout").toInt.milliseconds
+      context.system.scheduler.scheduleOnce(sessionHoldOnTime, self, new CloseSession(consumerRef,consumerId))
     }
   }
 
-
   def addNewEvent(event:Event) = eventsQueue.addNewEvent(event)
+
+  def closeSession(consumerRef:ActorRef,consumerId:String) = {
+    val offset = consumerIdToOffset.get(consumerId).getOrElse(0)
+    val data = eventsQueue.getNextEvent(offset).getOrElse(null)
+    if(data != null){
+      consumerRef ! data
+      consumerIdToOffset.update(consumerId,consumerIdToOffset.get(consumerId).get + 1)
+    }
+    else{
+      consumerRef ! EndOfQueue
+    }
+  }
 }
