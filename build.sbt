@@ -10,8 +10,11 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
-  specs2 % Test
+  specs2 % Test,
+  "org.scalatestplus" %% "play" % "1.1.0" % "test",
+  "com.typesafe.akka" %% "akka-testkit" % "2.3.11" % "test"
 )
+
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 

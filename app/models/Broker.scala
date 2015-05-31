@@ -7,22 +7,45 @@ package models
  */
 
 import akka.actor._
+import scala.collection.mutable._
 
 object Broker {
-  case class getNextEvent(consumerId:String)
-  case class addNewEvent(event:Event)
-  case class closeSession(consumerId:String)
+  def props = Props[Broker]
+
+  case class GetNextEvent(consumerId:String)
+  case class AddNewEvent(event:Event)
+  case class CloseSession(consumerId:String)
+  case object EndOfQueue
 }
 
 class Broker extends Actor{
   import Broker._
 
   val eventsQueue = EventQueue()
-  var consumerIdToOffset = Map[String,Int]()
+  val consumerIdToOffset = Map[String,Int]()
 
   def receive = {
-    case getNextEvent(consumerId) => ???
-    case addNewEvent(event) => ???
-    case closeSession(consumerId) => ???
+    case GetNextEvent(consumerId) => getNextEvent(consumerId)
+    case AddNewEvent(event) => addNewEvent(event)
+    case CloseSession(consumerId) => ???
   }
+
+  def getNextEvent(consumerId:String) = {
+    val offset = consumerIdToOffset.get(consumerId).getOrElse(0)
+    if(offset == 0)
+      consumerIdToOffset.update(consumerId,0)
+
+    val data = eventsQueue.getNextEvent(offset).getOrElse(null)
+    if(data != null){
+      sender() ! data
+      consumerIdToOffset.update(consumerId,consumerIdToOffset.get(consumerId).get + 1)
+    }
+    else{
+      sender() ! EndOfQueue
+      //TODO:scheduler a self message (closesession()) to remove this consumer after a while
+    }
+  }
+
+
+  def addNewEvent(event:Event) = eventsQueue.addNewEvent(event)
 }

@@ -10,17 +10,17 @@ import akka.actor.SupervisorStrategy._
 object HeadBroker {
   def props = Props[HeadBroker]
 
-  case class addNewTopic(topicName:String)
+  case class AddNewTopic(topicName:String)
 }
 
 class HeadBroker extends Actor{
   import HeadBroker._
 
-  override val supervisorStrategy = OneForOneStrategy {
+  override val supervisorStrategy = OneForOneStrategy(){
     case _:Exception => Restart
   }
 
   def receive = {
-    case addNewTopic(topicName) => ???
+    case AddNewTopic(topicName) => ???
   }
 }
