@@ -1,0 +1,30 @@
+@(topics:List[String])
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Producer</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+</head>
+<body>
+<div align="center">
+    Topics
+    <select name="Topics" id="topicsSelect" onchange="topicChangedInProducer()">
+        <option value="selectOne">select one</option>
+        @topics.map{topic =>
+        <option value="@topic">
+            @topic
+        </option>}
+        <option value="createNew">create new</option>
+    </select>
+</div>
+    <hr>
+    <div id="formsPlace" style="visibility:hidden;">
+        <form id="topicsManipulation">
+            <input type="text" id="eventNameText"  size=40>
+            <input type="button" id="applyChangeButton"  value="create topic" onclick="getChanges()">
+        </form>
+    </div>
+</body>
+</html>

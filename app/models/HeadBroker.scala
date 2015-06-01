@@ -7,6 +7,8 @@ package models
 import akka.actor._
 import akka.actor.SupervisorStrategy._
 
+trait HeadBrokerResponse
+
 object HeadBroker {
   def props = Props[HeadBroker]
 

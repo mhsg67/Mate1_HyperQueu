@@ -1,2 +1,8 @@
 # Home page
+GET     /                                controllers.HyperQueueController.index
+GET     /:topicName                      controllers.HyperQueueController.getNextInTopic(topicName:String)
+GET     /producers                       controllers.HyperQueueController.producerFirstPage
 
+
+POST    /createNewTopic                  controllers.HyperQueueController.createNewTopic
+POST    /:topicName                      controllers.HyperQueueController.addNewEvent(topicName:String)
