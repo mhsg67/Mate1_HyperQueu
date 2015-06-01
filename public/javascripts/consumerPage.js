@@ -2,8 +2,10 @@ function topicChangedConsumer(){
        var topicName = document.getElementById("topicsSelect").value;
        if( topicName == "select one")
             document.getElementById("eventPresenter").style.visibility = "hidden";
-       else
+       else{
+            document.getElementById("eventPlace").innerHTML = "";
             fetchTopicEvents(topicName);
+       }
 }
 
 function fetchEventCallBack(data){

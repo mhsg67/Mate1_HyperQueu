@@ -6,8 +6,6 @@ import play.api.libs.json._
 import play.api.test._
 import play.api.test.Helpers._
 
-import scala.concurrent.Await
-
 @RunWith(classOf[JUnitRunner])
 class HyperQueueControllerTest extends Specification {
 
@@ -16,16 +14,20 @@ class HyperQueueControllerTest extends Specification {
       val json = Json.obj("data" -> "t1")
       val future = route(FakeRequest(POST,"/createNewTopic",FakeHeaders(),json)).get
 
-      status(future) must equalTo(CREATED)
+      status(future) must equalTo(OK)
+      contentAsString(future) must contain ("ACK")
     }
 
     "send confilct topic" in new WithApplication() {
       val json = Json.obj("data" -> "t1")
       val result1 = route(FakeRequest(POST,"/createNewTopic",FakeHeaders(),json)).get
-      status(result1) must equalTo(CREATED)
+      status(result1) must equalTo(OK)
+      contentAsString(result1) must contain ("ACK")
 
       val result2 = route(FakeRequest(POST,"/createNewTopic",FakeHeaders(),json)).get
-      status(result2) must equalTo(CONFLICT)
+      status(result2) must equalTo(OK)
+      contentAsString(result2) must contain ("NCK")
+      
     }
   }
 

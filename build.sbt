@@ -10,6 +10,9 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
+  "com.typesafe.akka" % "akka-persistence-experimental_2.11" % "2.3.11",
+  "org.iq80.leveldb" % "leveldb" % "0.7",
+  "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
   specs2 % Test,
   "org.scalatestplus" %% "play" % "1.1.0" % "test",
   "com.typesafe.akka" %% "akka-testkit" % "2.3.11" % "test"
