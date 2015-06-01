@@ -1,3 +1,5 @@
+package modelstests
+
 /**
  * This class test EventQueue class
  */

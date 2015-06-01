@@ -1,15 +1,17 @@
+package modelstests
+
 /**
- * Created by MHSG on 2015-05-31.
+ * This class test Broker actor
  */
 
+import akka.actor.ActorSystem
+import akka.testkit.{ImplicitSender, TestActorRef, TestKit}
 import models.Broker._
 import models._
-import akka.actor.ActorSystem
-import akka.testkit.{ImplicitSender, TestKit, TestActorRef}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 
-class BrokerTest1(_system:ActorSystem) extends TestKit(_system) with ImplicitSender
+class BrokerTest(_system:ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll{
 
   def this() = this(ActorSystem("BrokerTest2"))
