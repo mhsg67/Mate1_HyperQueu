@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>HyperQueue</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="@routes.Assets.versioned("javascripts/consumerPage.js")" type="text/javascript"> </script>
 </head>
 <body>
     <div align="center">
@@ -19,7 +20,9 @@
         </select>
     </div>
     <hr>
-    <div id="formsPlace">
+    <div id="eventPresenter" style="visibility:hidden;">
+        <input type="button" id="getNextEvent"  value="Next" onclick="nextEvent()">
+        <p id="eventPlace"></p>
     </div>
 </body>
 </html>
