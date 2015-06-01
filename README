@@ -1,4 +1,39 @@
-This is your new Play application
+This is Mate1 programming exercise
 =================================
 
-This file will be packaged with your application, when using `activator dist`.
+Feature List:
+-------------
+1. I have implemented most of required part except secure communication for producers.
+2. backend fully developed by Scala/AKKA in play framework 2.3.9 which is stateless web Tier and RESTful by default
+3. front-end developed by Javascript (and JQuery for communication with server) 
+4. The backend computation all handle by actors and through asynchronous message passing without any blocking.
+5. To build a scalable system, we create an actor for each topic which is responsible for serving all the events production/consumption. 
+6. previously mentioned actor are supervised by another actor which is in charge of creating new topic. 
+7. All the actors servers as the model part of MVC architecture.
+8. Since system's data and state are kept in memory, I have tried to use persistent actor to increase the system fault-tolerance; however, this library is still experimental an I had problems for resolving its dependencies (Anyway, I will definitely add the persistence actor in this project as a good use case for Akka persistency)
+
+
+Development Mode Execution:
+-------------
+1. Download the project and unzip it on your machine.
+2. change your working directory and go inside the extracted file.
+3. On Unix machines execute command "./activator run" (on windows activator.bat run) to start the server.
+4. server start working and listening on port 9000.
+5.1 in your browser type address http://localhost:9000 to start as a consumer.
+5.2 in your browser type address http://localhost:9000/producers to start as producer.
+
+6. there is a dropdown in each page which represents topics.
+7.1 in producer page you can create new topic by selecting "create new" in dropdown and filling the topic name.
+7.2 in producer page you can create new event for a topic by selecting topic and filling the event name.
+7.3 in consumer page you can fetch events of a topic by selecting the topic from dropdown and fetching each event by clicking "next" button which will show up. 
+
+
+Production Mode Execution:
+-------------
+1. complete the first two step of "development mode execution".
+2. On Unix machines execute command "./activator dist" (on windows "activator.bat dist") to create production executive file.
+3. Go to "target/universal/" 
+4. extract "hyperqueue-1.0-SNAPSHOT.zip" file.
+5. go to extracted folder -> bin 
+6. execute file hyperqueue ("./hyperqueue")
+6.1 you can specify the server port through -Dhttp.port=9443 argument.
