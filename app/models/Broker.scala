@@ -11,7 +11,6 @@ import com.typesafe.config.ConfigFactory
 import scala.collection.mutable._
 import scala.concurrent.duration._
 
-
 object Broker {
   def props = Props[Broker]
 

@@ -7,8 +7,6 @@ package models
 import akka.actor._
 import akka.actor.SupervisorStrategy._
 
-trait HeadBrokerResponse
-
 object HeadBroker {
   def props = Props[HeadBroker]
 
@@ -36,7 +34,7 @@ class HeadBroker extends Actor{
       sender() ! TopicExist
     else{
       val actorName = "Broker" + topicName
-      val actorRef = context.actorOf(Broker.props,actorName)
+      val actorRef = context.actorOf(Broker.props, actorName)
       topics += topicName
       sender() ! TopicAdded(actorRef)
     }
